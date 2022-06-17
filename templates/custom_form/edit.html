@@ -1,0 +1,46 @@
+{% extends "layout.html" %} {% block body %}
+<div class="row">
+  <h2>情報登録</h2>
+</div>
+{% if status in ['external_account', 'complete'] %}
+<p>アカウント情報の登録済みです</p>
+<form
+  action="{{ url_for('custom_form.edit_stripe_acct') }}"
+  method="post"
+  class="add-entry"
+>
+  <div class="mb-3">
+    <label for="InputTitle">クレジットカード明細記載情報(英字)</label>
+    <input
+      type="text"
+      class="form-control"
+      value="{{ acct.settings.payments.statement_descriptor }}"
+      name="statement_descriptor"
+    />
+    <label for="InputTitle">クレジットカード明細記載情報(かな)</label>
+    <input
+      type="text"
+      class="form-control"
+      value="{{ acct.settings.payments.statement_descriptor_kana }}"
+      name="statement_descriptor_kana"
+    />
+    <label for="InputTitle">クレジットカード明細記載情報(漢字)</label>
+    <input
+      type="text"
+      class="form-control"
+      value="{{ acct.settings.payments.statement_descriptor_kanji }}"
+      name="statement_descriptor_kanji"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="InputTitle">URL</label>
+    <input
+      type="text"
+      class="form-control"
+      value="{{ acct.business_profile.url }}"
+      name="url"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">登録</button>
+</form>
+{% endif %} {% endblock %}
