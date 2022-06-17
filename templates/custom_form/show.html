@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="row justify-content-between">
+            <div class="col-4">
+                <h2>情報登録</h2>
+            </div>
+            <div class="col-4">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ url_for('custom_form.edit_stripe_acct') }}" class="btn btn-primary text-nowrap" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-plus">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span style="vertical-align: 2px;">情報の追加・編集</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% if status in ['external_account', 'complete'] %}
+        <p>アカウント情報の登録済みです</p>
+        <form action="{{ url_for('custom_form.restart_stripe') }}" method=post class=add-entry>
+            <button type="submit" class="btn btn-primary">情報登録再開</button>
+        </form>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>ID</td>
+                <td>{{ acct.id }}</td>
+            </tr>
+            <tr>
+                <th scope="row">1</th>
+                <td>クレジットカード明細記載情報(英字)</td>
+                <td>{{ acct.settings.payments.statement_descriptor }}</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>クレジットカード明細記載情報(かな)</td>
+                <td>{{ acct.settings.payments.statement_descriptor_kana }}</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>クレジットカード明細記載情報(漢字)</td>
+                <td>{{ acct.settings.payments.statement_descriptor_kanji }}</td>
+            </tr>
+            <tr>
+                <th scope="row">4</th>
+                <td>URL</td>
+                <td>{{ acct.business_profile.url }}</td>
+            </tr>
+            <tr>
+                <th scope="row">5</th>
+                <td>product_description</td>
+                <td>{{ acct.business_profile.product_description }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <h3>銀行口座</h3>
+            </div>
+            <div class="col-4">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ url_for('custom_form.create_external_account_stripe_acct') }}" class="btn btn-primary text-nowrap" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-plus">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span style="vertical-align: 2px;">銀行口座を追加</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% for bank in acct.external_accounts.data %}
+            <p>{{ bank.bank_name }}</p>
+            <p>{{ bank.last4 }}</p>
+        {% endfor %}
+    {% else %}
+        <p>登録をこちらから続けてください</p>
+        <form action="{{ url_for('custom_form.restart_stripe') }}" method=post class=add-entry>
+            <button type="submit" class="btn btn-primary">情報登録再開</button>
+        </form>
+    {% endif %}
+{% endblock %}
