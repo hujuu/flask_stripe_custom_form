@@ -1,0 +1,27 @@
+{% extends "layout.html" %} {% block body %}
+<div class="row">
+  <h2>情報登録</h2>
+</div>
+{% if status in ['external_account', 'complete'] %}
+<p>アカウント情報の登録済みです</p>
+<form
+  action="{{ url_for('custom_form.create_external_account_stripe_acct') }}"
+  method="post"
+  class="add-entry"
+>
+  <div class="mb-3">
+    <label for="InputTitle">口座名義</label>
+    <input
+      type="text"
+      class="form-control"
+      value=""
+      name="account_holder_name"
+    />
+    <label for="InputTitle">金融番号</label>
+    <input type="text" class="form-control" value="" name="routing_number" />
+    <label for="InputTitle">口座番号</label>
+    <input type="text" class="form-control" value="" name="account_number" />
+  </div>
+  <button type="submit" class="btn btn-primary">登録</button>
+</form>
+{% endif %} {% endblock %}
