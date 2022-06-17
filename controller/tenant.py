@@ -21,7 +21,7 @@ def requires_auth(f):
 @app.route('/tenant')
 @requires_auth
 def tenants():
-    doc_ref = db.collection(u'tenants').document('pluspass')
+    doc_ref = db.collection(u'tenants').document('')
     doc = doc_ref.get()
     project_list = doc.to_dict()['project_list']
 
