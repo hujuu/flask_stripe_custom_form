@@ -1,0 +1,15 @@
+{% extends "layout.html" %} {% block body %}
+<div class="row">
+  <h2>情報登録</h2>
+</div>
+{% if doc.to_dict().stripe_acct_id %}
+<p>アカウント情報の登録済みです</p>
+{% else %}
+<form
+  action="{{ url_for('custom_form.registration_stripe') }}"
+  method="post"
+  class="add-entry"
+>
+  <button type="submit" class="btn btn-primary">情報登録開始</button>
+</form>
+{% endif %} {% endblock %}
