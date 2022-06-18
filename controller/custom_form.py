@@ -1,3 +1,4 @@
+"""Functions related to registration of Stripe Connect Custom."""
 import os
 from functools import wraps
 from google.cloud import firestore
@@ -68,7 +69,6 @@ def registration_stripe():
 
     affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
     doc_ref = db.collection(u'tenants').document(affiliated_tenant['tenant'])
-
     doc_ref.update(
         {
             u'stripe_acct_id': response['id'],
