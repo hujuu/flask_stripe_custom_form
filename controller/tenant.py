@@ -1,3 +1,4 @@
+"""Function to check the tenant to which the Connect account creator belongs."""
 from functools import wraps
 from google.cloud import firestore
 from flask import Flask, request, send_file, abort, Blueprint
@@ -24,7 +25,6 @@ def tenants():
     doc_ref = db.collection(u'tenants').document('')
     doc = doc_ref.get()
     project_list = doc.to_dict()['project_list']
-
     return render_template(
         'tenants/index.html',
         doc=doc.to_dict(),
