@@ -190,7 +190,7 @@ def create_external_account_stripe_acct():
                 acct=response,
                 status=status,
             )
-        elif request.method == 'POST':
+        if request.method == 'POST':
             account_holder_name = request.form['account_holder_name']
             routing_number = request.form['routing_number']
             account_number = request.form['account_number']
