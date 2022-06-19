@@ -1,10 +1,7 @@
 """Function to check the tenant to which the Connect account creator belongs."""
 from functools import wraps
 from google.cloud import firestore
-from flask import Flask, request, send_file, abort, Blueprint
-from flask import redirect
-from flask import render_template
-from flask import session
+from flask import session, render_template, redirect, Blueprint
 
 db = firestore.Client(project='')
 app = Blueprint("tenant", __name__)
