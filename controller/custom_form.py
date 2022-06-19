@@ -15,14 +15,14 @@ app = Blueprint("custom_form", __name__)
 stripe.api_key = os.environ['stripe_api_key']
 
 
-def requires_auth(f):
+def requires_auth(func):
     """Users who are not logged in are redirected to the top page."""
 
-    @wraps(f)
+    @wraps(func)
     def decorated(*args, **kwargs):
         if 'profile' not in session:
             return redirect('/')
-        return f(*args, **kwargs)
+        return func(*args, **kwargs)
 
     return decorated
 
