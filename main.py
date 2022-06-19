@@ -36,13 +36,13 @@ app.register_blueprint(tenant.app)
 app.register_blueprint(custom_form.app)
 
 
-def requires_auth(f):
+def requires_auth(func):
     """Users who are not logged in are redirected to the top page."""
-    @wraps(f)
+    @wraps(func)
     def decorated(*args, **kwargs):
         if 'profile' not in session:
             return redirect('/')
-        return f(*args, **kwargs)
+        return func(*args, **kwargs)
     return decorated
 
 
