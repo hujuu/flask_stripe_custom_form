@@ -40,7 +40,7 @@ def custom_form():
     response = stripe.Account.retrieve(stripe_acct_id)
     if stripe_acct_id:
         return redirect(url_for('custom_form.show_stripe_acct'))
-    
+
     return render_template(
         'custom_form/index.html',
         doc=doc,
@@ -132,8 +132,7 @@ def edit_stripe_acct():
             )
 
             return redirect(url_for('custom_form.show_stripe_acct'))
-        else:
-            return abort(400)
+        return abort(400)
     except Exception as e:
         return str(e)
 
