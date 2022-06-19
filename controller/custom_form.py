@@ -133,8 +133,8 @@ def edit_stripe_acct():
 
             return redirect(url_for('custom_form.show_stripe_acct'))
         return abort(400)
-    except Exception as e:
-        return str(e)
+    except (Exception,):
+        return str(Exception)
 
 
 @app.route('/custom_form/detail', methods=['GET'])
