@@ -29,7 +29,7 @@ def requires_auth(f):
 @requires_auth
 def custom_form():
     """
-    The page to start account registration. If registered, redirect to the page displaying the registration data.
+    The page to start account registration.
     """
     affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
     doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
@@ -71,7 +71,7 @@ def registration_stripe():
     )
 
     affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
-    doc_ref = db.collection(u'tenants').document(affiliated_tenant['tenant'])
+    doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
     doc_ref.update(
         {
             u'stripe_acct_id': response['id'],
