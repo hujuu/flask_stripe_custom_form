@@ -23,6 +23,7 @@ def requires_auth(f):
 @app.route('/tenant')
 @requires_auth
 def tenants():
+    """Check the tenant to which you belong."""
     doc_ref = db.collection('tenants').document('')
     doc = doc_ref.get()
     project_list = doc.to_dict()['project_list']
