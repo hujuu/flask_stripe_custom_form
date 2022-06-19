@@ -17,11 +17,13 @@ stripe.api_key = os.environ['stripe_api_key']
 
 def requires_auth(f):
     """Users who are not logged in are redirected to the top page."""
+
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'profile' not in session:
             return redirect('/')
         return f(*args, **kwargs)
+
     return decorated
 
 
@@ -38,12 +40,12 @@ def custom_form():
     response = stripe.Account.retrieve(stripe_acct_id)
     if stripe_acct_id:
         return redirect(url_for('custom_form.show_stripe_acct'))
-    else:
-        return render_template(
-            'custom_form/index.html',
-            doc=doc,
-            acct=response
-        )
+    
+    return render_template(
+        'custom_form/index.html',
+        doc=doc,
+        acct=response
+    )
 
 
 @app.route('/custom_form/new', methods=['POST'])
