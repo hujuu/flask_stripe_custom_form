@@ -16,6 +16,7 @@ stripe.api_key = os.environ['stripe_api_key']
 
 
 def requires_auth(f):
+    """Users who are not logged in are redirected to the top page."""
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'profile' not in session:
