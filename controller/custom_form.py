@@ -169,6 +169,7 @@ def show_stripe_acct():
 @app.route('/custom_form/add_bank', methods=['GET', 'POST'])
 @requires_auth
 def create_external_account_stripe_acct():
+    """Add a bank account."""
     try:
         affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
         doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
@@ -218,6 +219,7 @@ def create_external_account_stripe_acct():
 @app.route('/custom_form/restart', methods=['POST'])
 @requires_auth
 def restart_stripe():
+    """Resuming Account registration on Stripe's form."""
     affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
     doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
     doc = doc_ref.get()
