@@ -11,6 +11,7 @@ app = Blueprint("tenant", __name__)
 
 
 def requires_auth(f):
+    """Users who are not logged in are redirected to the top page."""
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'profile' not in session:
@@ -22,7 +23,7 @@ def requires_auth(f):
 @app.route('/tenant')
 @requires_auth
 def tenants():
-    doc_ref = db.collection(u'tenants').document('')
+    doc_ref = db.collection('tenants').document('')
     doc = doc_ref.get()
     project_list = doc.to_dict()['project_list']
     return render_template(
