@@ -87,83 +87,77 @@ def registration_stripe():
 @requires_auth
 def edit_stripe_acct():
     """Additions and changes of optional items."""
-    try:
-        affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
-        doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
-        doc = doc_ref.get()
-        stripe_acct_id = doc.to_dict().get('stripe_acct_id', None)
-        response = stripe.Account.retrieve(stripe_acct_id)
-        if len(response['requirements']['eventually_due']) > 0:
-            status = response['requirements']['eventually_due'][0]
-        else:
-            status = 'complete'
 
-        if request.method == 'GET':
-            if not stripe_acct_id:
-                return jsonify({'error': 'Could not find connect account.'}), 404
+    affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
+    doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
+    doc = doc_ref.get()
+    stripe_acct_id = doc.to_dict().get('stripe_acct_id', None)
+    response = stripe.Account.retrieve(stripe_acct_id)
+    if len(response['requirements']['eventually_due']) > 0:
+        status = response['requirements']['eventually_due'][0]
+    else:
+        status = 'complete'
 
-            return render_template(
-                'custom_form/edit.html',
-                acct=response,
-                status=status
-            )
-        if request.method == 'POST':
-            statement_descriptor = request.form['statement_descriptor']
-            statement_descriptor_kana = request.form['statement_descriptor_kana']
-            statement_descriptor_kanji = request.form['statement_descriptor_kanji']
-            url = request.form['url']
+    if request.method == 'GET':
+        if not stripe_acct_id:
+            return jsonify({'error': 'Could not find connect account.'}), 404
 
-            stripe.Account.modify(
-                stripe_acct_id,
-                settings={
-                    "payments": {
-                        "statement_descriptor": statement_descriptor,
-                        "statement_descriptor_kana": statement_descriptor_kana,
-                        "statement_descriptor_kanji": statement_descriptor_kanji
-                    },
-                    "payouts": {
-                        "schedule": {
-                            "interval": "manual",
-                        },
+        return render_template(
+            'custom_form/edit.html',
+            acct=response,
+            status=status
+        )
+    if request.method == 'POST':
+        statement_descriptor = request.form['statement_descriptor']
+        statement_descriptor_kana = request.form['statement_descriptor_kana']
+        statement_descriptor_kanji = request.form['statement_descriptor_kanji']
+        url = request.form['url']
+
+        stripe.Account.modify(
+            stripe_acct_id,
+            settings={
+                "payments": {
+                    "statement_descriptor": statement_descriptor,
+                    "statement_descriptor_kana": statement_descriptor_kana,
+                    "statement_descriptor_kanji": statement_descriptor_kanji
+                },
+                "payouts": {
+                    "schedule": {
+                        "interval": "manual",
                     },
                 },
-                business_profile={"url": url,
-                                  "product_description": ""},
-            )
+            },
+            business_profile={"url": url,
+                              "product_description": ""},
+        )
 
-            return redirect(url_for('custom_form.show_stripe_acct'))
-        return abort(400)
-    except (Exception,):
-        return str(Exception)
-
+        return redirect(url_for('custom_form.show_stripe_acct'))
+    return abort(400)
+    
 
 @app.route('/custom_form/detail', methods=['GET'])
 @requires_auth
 def show_stripe_acct():
     """Show registered account information."""
-    try:
-        affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
-        doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
-        doc = doc_ref.get()
-        stripe_acct_id = doc.to_dict().get('stripe_acct_id', None)
+    affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
+    doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
+    doc = doc_ref.get()
+    stripe_acct_id = doc.to_dict().get('stripe_acct_id', None)
 
-        if not stripe_acct_id:
-            return jsonify({'error': 'Could not find Connect account.'}), 404
+    if not stripe_acct_id:
+        return jsonify({'error': 'Could not find Connect account.'}), 404
 
-        response = stripe.Account.retrieve(stripe_acct_id)
-        if len(response['requirements']['eventually_due']) > 0:
-            status = response['requirements']['eventually_due'][0]
-        else:
-            status = 'complete'
+    response = stripe.Account.retrieve(stripe_acct_id)
+    if len(response['requirements']['eventually_due']) > 0:
+        status = response['requirements']['eventually_due'][0]
+    else:
+        status = 'complete'
 
-        return render_template(
-            'custom_form/show.html',
-            acct=response,
-            status=status
-        )
-
-    except Exception as e:
-        return str(e)
+    return render_template(
+        'custom_form/show.html',
+        acct=response,
+        status=status
+    )
 
 
 @app.route('/custom_form/add_bank', methods=['GET', 'POST'])
