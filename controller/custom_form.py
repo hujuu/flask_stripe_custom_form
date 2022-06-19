@@ -2,7 +2,7 @@
 import os
 from functools import wraps
 from google.cloud import firestore
-from flask import Flask, request, abort, Blueprint
+from flask import request, abort, Blueprint
 from flask import jsonify
 from flask import redirect
 from flask import render_template
@@ -62,7 +62,6 @@ def registration_stripe():
             "product_description": "",
         }
     )
-
     response_link = stripe.AccountLink.create(
         account=response['id'],
         refresh_url="https://xxxx.a.run.app/custom_form/detail",
