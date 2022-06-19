@@ -107,7 +107,7 @@ def edit_stripe_acct():
                 acct=response,
                 status=status
             )
-        elif request.method == 'POST':
+        if request.method == 'POST':
             statement_descriptor = request.form['statement_descriptor']
             statement_descriptor_kana = request.form['statement_descriptor_kana']
             statement_descriptor_kanji = request.form['statement_descriptor_kanji']
