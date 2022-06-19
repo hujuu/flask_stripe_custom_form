@@ -49,6 +49,7 @@ def custom_form():
 @app.route('/custom_form/new', methods=['POST'])
 @requires_auth
 def registration_stripe():
+    """Get the stripe registration form."""
     response = stripe.Account.create(
         country="JP",
         type="custom",
@@ -86,7 +87,7 @@ def registration_stripe():
 def edit_stripe_acct():
     try:
         affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
-        doc_ref = db.collection(u'tenants').document(affiliated_tenant['tenant'])
+        doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
         doc = doc_ref.get()
         stripe_acct_id = doc.to_dict().get('stripe_acct_id', None)
         response = stripe.Account.retrieve(stripe_acct_id)
