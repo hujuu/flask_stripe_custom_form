@@ -9,6 +9,13 @@
 </h2>
 
 
+<div align="center">
+  <a href="https://github.com/hujuu/flask_stripe_custom_form/actions">
+    <img alt="GitHub Actions" src="https://img.shields.io/github/workflow/status/hujuu/flask_stripe_custom_form/Pylint/main">
+  </a>
+</div>
+<br />
+
 Flaskでstripe connect (Custom)の登録フォームを構築することができます。
 
 <h2>想定する構成</h2>
