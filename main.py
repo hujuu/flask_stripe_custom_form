@@ -1,3 +1,4 @@
+"""Login / logout function"""
 import os
 from functools import wraps
 import json
@@ -36,6 +37,7 @@ app.register_blueprint(custom_form.app)
 
 
 def requires_auth(f):
+    """Users who are not logged in are redirected to the top page."""
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'profile' not in session:
