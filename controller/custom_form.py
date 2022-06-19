@@ -170,50 +170,47 @@ def show_stripe_acct():
 @requires_auth
 def create_external_account_stripe_acct():
     """Add a bank account."""
-    try:
-        affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
-        doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
-        doc = doc_ref.get()
-        stripe_acct_id = doc.to_dict().get('stripe_acct_id', None)
-        response = stripe.Account.retrieve(stripe_acct_id)
-        if len(response['requirements']['eventually_due']) > 0:
-            status = response['requirements']['eventually_due'][0]
-        else:
-            status = 'complete'
+    affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
+    doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
+    doc = doc_ref.get()
+    stripe_acct_id = doc.to_dict().get('stripe_acct_id', None)
+    response = stripe.Account.retrieve(stripe_acct_id)
+    if len(response['requirements']['eventually_due']) > 0:
+        status = response['requirements']['eventually_due'][0]
+    else:
+        status = 'complete'
 
-        if request.method == 'GET':
-            if not stripe_acct_id:
-                return jsonify({'error': 'Could not find connect account.'}), 404
+    if request.method == 'GET':
+        if not stripe_acct_id:
+            return jsonify({'error': 'Could not find connect account.'}), 404
 
-            return render_template(
-                'custom_form/create_external_account.html',
-                acct=response,
-                status=status,
-            )
-        if request.method == 'POST':
-            account_holder_name = request.form['account_holder_name']
-            routing_number = request.form['routing_number']
-            account_number = request.form['account_number']
+        return render_template(
+            'custom_form/create_external_account.html',
+            acct=response,
+            status=status,
+        )
+    if request.method == 'POST':
+        account_holder_name = request.form['account_holder_name']
+        routing_number = request.form['routing_number']
+        account_number = request.form['account_number']
 
-            response_token = stripe.Token.create(
-                bank_account={
-                    "country": "JP",
-                    "currency": "jpy",
-                    "account_holder_name": account_holder_name,
-                    "account_holder_type": response['business_type'],
-                    "routing_number": routing_number,
-                    "account_number": account_number,
-                },
-            )
-            response = stripe.Account.create_external_account(
-                stripe_acct_id,
-                external_account=response_token['id']
-            )
-            return redirect(url_for('custom_form.show_stripe_acct'))
+        response_token = stripe.Token.create(
+            bank_account={
+                "country": "JP",
+                "currency": "jpy",
+                "account_holder_name": account_holder_name,
+                "account_holder_type": response['business_type'],
+                "routing_number": routing_number,
+                "account_number": account_number,
+            },
+        )
+        response = stripe.Account.create_external_account(
+            stripe_acct_id,
+            external_account=response_token['id']
+        )
+        return redirect(url_for('custom_form.show_stripe_acct'))
 
-        return abort(400)
-    except Exception as e:
-        return str(e)
+    return abort(400)
 
 
 @app.route('/custom_form/restart', methods=['POST'])
