@@ -97,6 +97,7 @@ def logout():
 
 @app.route('/api/v1/status')
 def api_status():
+    """Health Check."""
     return jsonify({'status': 'All green.'})
 
 
