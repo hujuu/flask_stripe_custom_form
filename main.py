@@ -48,6 +48,7 @@ def requires_auth(f):
 
 @app.route('/callback')
 def callback_handling():
+    """Auth0 callback"""
     auth0.authorize_access_token()
     resp = auth0.get('userinfo')
     userinfo = resp.json()
@@ -62,6 +63,7 @@ def callback_handling():
 
 @app.route('/login')
 def login():
+    """login process"""
     return auth0.authorize_redirect(
         redirect_uri='https://xxx.a.run.app/callback'
     )
@@ -69,12 +71,14 @@ def login():
 
 @app.route("/")
 def home():
+    """login form"""
     return render_template('home.html')
 
 
 @app.route('/dashboard')
 @requires_auth
 def dashboard():
+    """User's dashboard"""
     return render_template('dashboard.html',
                            userinfo=session['profile'],
                            userinfo_pretty=json.dumps(session['jwt_payload'], indent=4))
@@ -82,6 +86,7 @@ def dashboard():
 
 @app.route('/logout')
 def logout():
+    """Logout process."""
     session.clear()
     params = {
         'returnTo': url_for('home', _external=True, _scheme='https',),
