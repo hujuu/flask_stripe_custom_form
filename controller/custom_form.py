@@ -75,7 +75,7 @@ def registration_stripe():
     doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
     doc_ref.update(
         {
-            u'stripe_acct_id': response['id'],
+            'stripe_acct_id': response['id'],
         }
     )
 
@@ -85,6 +85,7 @@ def registration_stripe():
 @app.route('/custom_form/edit', methods=['GET', 'POST'])
 @requires_auth
 def edit_stripe_acct():
+    """Additions and changes of optional items."""
     try:
         affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
         doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
