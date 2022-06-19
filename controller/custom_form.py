@@ -28,6 +28,9 @@ def requires_auth(f):
 @app.route('/custom_form')
 @requires_auth
 def custom_form():
+    """
+    The page to start account registration. If registered, redirect to the page displaying the registration data.
+    """
     affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
     doc_ref = db.collection(u'tenants').document(affiliated_tenant['tenant'])
     doc = doc_ref.get()
