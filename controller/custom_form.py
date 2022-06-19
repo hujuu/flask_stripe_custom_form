@@ -210,8 +210,8 @@ def create_external_account_stripe_acct():
                 external_account=response_token['id']
             )
             return redirect(url_for('custom_form.show_stripe_acct'))
-        else:
-            return abort(400)
+
+        return abort(400)
     except Exception as e:
         return str(e)
 
