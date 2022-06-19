@@ -32,11 +32,10 @@ def custom_form():
     The page to start account registration. If registered, redirect to the page displaying the registration data.
     """
     affiliated_tenant = session['jwt_payload'].get('https://xxxx/app_metadata', None)
-    doc_ref = db.collection(u'tenants').document(affiliated_tenant['tenant'])
+    doc_ref = db.collection('tenants').document(affiliated_tenant['tenant'])
     doc = doc_ref.get()
     stripe_acct_id = doc.to_dict().get('stripe_acct_id', None)
     response = stripe.Account.retrieve(stripe_acct_id)
-
     if stripe_acct_id:
         return redirect(url_for('custom_form.show_stripe_acct'))
     else:
