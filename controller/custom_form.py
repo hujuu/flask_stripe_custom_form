@@ -133,7 +133,7 @@ def edit_stripe_acct():
 
         return redirect(url_for('custom_form.show_stripe_acct'))
     return abort(400)
-    
+
 
 @app.route('/custom_form/detail', methods=['GET'])
 @requires_auth
