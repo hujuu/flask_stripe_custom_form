@@ -1,4 +1,5 @@
 """Function to check the tenant to which the Connect account creator belongs."""
+import os
 from functools import wraps
 from google.cloud import firestore
 from flask import session, render_template, redirect, Blueprint
